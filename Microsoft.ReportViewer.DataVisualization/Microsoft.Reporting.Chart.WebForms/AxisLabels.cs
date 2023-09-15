@@ -374,6 +374,11 @@ namespace Microsoft.Reporting.Chart.WebForms
 					{
 						num7 = Math.Pow(logarithmBase, num7);
 					}
+     					// .net core problem 0.1+0.2=0.30000000000000004
+                         		if (GetDecimalDigitsCount(num7) > 6)
+                    			{
+						num7 = Math.Round(num7, 6);
+                    			}
 					double num8 = (double)((decimal)num10 + (decimal)labelStyle.Interval * 0.5m);
 					double toPosition = (double)((decimal)num10 + (decimal)labelStyle.Interval * 1.5m);
 					if (!((decimal)num8 > (decimal)viewMaximum) && !((decimal)((num8 + toPosition) / 2.0) > (decimal)viewMaximum))
@@ -398,6 +403,12 @@ namespace Microsoft.Reporting.Chart.WebForms
 				}
 			}
 		}
+
+          	static int GetDecimalDigitsCount(double number)
+	        {
+	            string[] str = number.ToString(new System.Globalization.NumberFormatInfo() { NumberDecimalSeparator = "." }).Split('.');
+	            return str.Length == 2 ? str[1].Length : 0;
+	        }
 
 		private string GetPointLabel(ArrayList series, double valuePosition, bool nonZeroXValues, bool indexedSeries)
 		{
